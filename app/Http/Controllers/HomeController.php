@@ -162,10 +162,7 @@ class HomeController extends Controller {
     $order = Order::where('id', $id)->first();
     return view('home.orders.success')->withOrder($order);
   }
-
-
-  
-  
+ 
   // ----------------------
 
   public function showCart() {
@@ -187,9 +184,9 @@ class HomeController extends Controller {
         foreach($request->option as $row) {
             $options[] = $row[0];
         }
-        Cart::add(['id' => $product_id, 'name' => $name, 'qty' => $qty, 'price' => $price, 'options' => $options]);
+        Cart::add(['id' => $product_id, 'name' => $name, 'qty' => $qty, 'price' => $price, 'weight' => 0, 'options' => $options]);
     } else {
-        Cart::add(['id' => $product_id, 'name' => $name, 'qty' => $qty, 'price' => $price]);
+        Cart::add(['id' => $product_id, 'name' => $name, 'qty' => $qty, 'price' => $price, 'weight' => 0]);
     }
     return redirect()->route('order.create');
   }
@@ -256,9 +253,9 @@ class HomeController extends Controller {
 
  // -----------------------
 
-  public function index() {
-      return view('home.home');
-  }
+  // public function index() {
+  //     return view('home.home');
+  // }
 
   public function check_expired_promo() {
 
@@ -404,10 +401,6 @@ class HomeController extends Controller {
             ->withCategory($category->name)
             ->withCategoryid($category->id);
         }
-  }
-
-  public function indexSearch() {
-        return view('home.indexSearch');
   }
 
   public function search(Request $request) {
