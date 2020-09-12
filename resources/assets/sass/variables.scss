@@ -1,0 +1,28 @@
+$danger: #E74847;
+$primary: #BB8FCE;
+$light: #636B6F;
+// RED - E74847
+// ORANGE - FF8200
+// PURPLE - BB8FCE
+$link: $danger;
+$link-hover: hsl(48, 100%, 67%);
+$card-header-weight: $weight-normal;
+$notification-padding: 0.5rem;
+$tooltip-radius: $radius-large;
+// PAGINATION
+$pagination-color: $danger;
+$pagination-border-color: $danger;
+$pagination-current-color: white;
+$pagination-current-border-color: $danger;
+$pagination-current-background-color: $danger;
+// BULMA BADGE
+$badge-height: 16px;
+$badge-font-size: 0.7rem;
+$badge-padding: 0.15rem 0.30rem;
+$badge-shadow: 0px 0px 0px 2px #fff;
+// BULMA MENU
+$menu-list-border-left: 0px;
+$menu-list-link-padding: 0.75em 0.75em;
+$menu-item-active-background-color: $primary;
+$menu-item-color: $white;
+$menu-item-radius: 4px;

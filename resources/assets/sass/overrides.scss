@@ -1,0 +1,85 @@
+.section {
+    padding: 0 1rem;
+}
+.loading-overlay .loading-background {
+    background: #fff;
+    opacity: 0.5;
+}
+
+.loading-overlay .loading-icon:after {
+    border: 7px dashed $primary;
+    -webkit-animation: spinAround 1000ms infinite linear;
+            animation: spinAround 1000ms infinite linear;
+}
+.navbar-burger span {
+  background-color: currentColor;
+  display: block;
+  height: 3px;
+  left: calc(50% - 20px);
+  position: absolute;
+  -webkit-transform-origin: center;
+          transform-origin: center;
+  -webkit-transition-duration: 86ms;
+          transition-duration: 86ms;
+  -webkit-transition-property: background-color, opacity, -webkit-transform;
+  transition-property: background-color, opacity, -webkit-transform;
+  transition-property: background-color, opacity, transform;
+  transition-property: background-color, opacity, transform, -webkit-transform;
+  -webkit-transition-timing-function: ease-out;
+          transition-timing-function: ease-out;
+  width: 30px;
+}
+
+.navbar-burger span:nth-child(1) {
+  top: calc(50% - 2px);
+}
+
+.navbar-burger span:nth-child(2) {
+  top: calc(50% - 10px);
+}
+
+.navbar-burger span:nth-child(3) {
+  top: calc(50% + 6px);
+}
+
+
+.navbar-burger.is-active span:nth-child(1) {
+  -webkit-transform: translateY(1px) rotate(45deg);
+          transform: translateY(1px) rotate(45deg);
+}
+
+.notices .snackbar {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-animation-duration: 150ms;
+          animation-duration: 150ms;
+  margin: 0.5em 0;
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+  border-radius: 4px;
+  pointer-events: auto;
+  background: whitesmoke;
+  color: #333;
+  min-height: 3em;
+}
+
+.notices .snackbar .action .button {
+  font-weight: 600;
+  text-transform: uppercase;
+  background: whitesmoke;
+  border: transparent;
+}
+
+.notices .snackbar .action .button:hover {
+  background: #ccc;
+}
+
+.notices .snackbar .action .button:active {
+  background: #ccc;
+}
