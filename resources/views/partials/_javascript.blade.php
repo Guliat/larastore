@@ -1,4 +1,4 @@
-<script src="{{ asset('js/app.js') }}?_v071219"></script>
+<script src="{{ asset('js/app.js') }}"></script>
 <script>
 new Vue({
 	el: '#categoryDropDown'

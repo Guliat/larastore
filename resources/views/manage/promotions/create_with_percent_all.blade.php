@@ -1,11 +1,11 @@
-@extends('main')
+@extends('manage.dashboard')
 @section('title', '| ПРОМОТИРАНЕ')
 @section('header', 'ПРОМОТИРАНЕ')
 @section('quickMenu')
 	@include('partials.buttons._home')
 	@include('partials.buttons._back')
 @endsection
-@section('content')
+@section('manage.content')
 	<div class="columns">
 		<div class="column is-4 is-offset-4">
 			<form action="{{route('manage.promotions.store.with.percent.all')}}" method="post">

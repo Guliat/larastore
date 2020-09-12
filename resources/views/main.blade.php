@@ -2,7 +2,7 @@
 <html lang="{{ app()->getLocale() }}">
 <!-- HEAD -->
 <head>
-@include('partials._googleAnalytics')
+{{-- @include('partials._googleAnalytics') --}}
 @include('partials._head')
 </head>
 <!-- END HEAD -->

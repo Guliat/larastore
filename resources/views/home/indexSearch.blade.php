@@ -36,7 +36,7 @@
 				@foreach($results as $product)
 			        <div class="column is-one-fifth">
 						<span class="is-size-7">МОДЕЛ: {{ $product->model }}</span>
-						@include('partials._cleanProductCard')
+						@include('home.cards.all')
 			        </div>
 				@endforeach
 			</div>

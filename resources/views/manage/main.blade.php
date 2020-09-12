@@ -15,7 +15,7 @@
                         <span class="has-text-white is-size-5">
                             <i class="fa fa-user fa-3x"></i>
                             <br>
-                            <?php $admin = App\User::where('id', Auth::id())->first(); ?>
+                            <?php $admin = App\Models\User::where('id', Auth::id())->first(); ?>
                             {{ $admin->name }}
                         </span>
                     </div>
