@@ -14,6 +14,15 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
+    'prefix' => env('APP_PREFIX', 'larastore-'),
+    'description' => env('APP_DESCRIPTION', 'Laravel eCommerce Platform'),
+    'favicon' => env('APP_FAVICON', 'larastore-favicon.png'),
+    'favicon196' => env('APP_FAVICON196', 'larastore-favicon196.png'),
+    'logo' => env('APP_LOGO', 'larastore-logo.png'),
+    'theme' => env('APP_THEME', 'app.css'),
+    'theme_color' => env('APP_THEME_COLOR', '#333'),
+    'phone' => env('APP_PHONE', '0 000 00 00 00'),
+    'mail' => env('APP_MAIL', 'office@larastore'),
 
     /*
     |--------------------------------------------------------------------------
