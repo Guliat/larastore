@@ -32,7 +32,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 # ----------------- CLIENTS ---------------
 	# -------------------------------------------
 	#Route::get('/boutique', '[HomeController@boutiqueHome]')->name('boutique.home');
-		Route::view('/', 'home.home')->name('home');
+		Route::view('/', 'home.home');
 		Route::view('/home', 'home.home')->name('home');
 		Route::view('/manage', 'manage.dashboard');
 		Route::get('/info', [HomeController::class, 'info'])->name('info.info');
