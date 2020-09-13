@@ -24,17 +24,17 @@ use App\Http\Controllers\ZoneController;
 |
 */
 
-#Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-#    return view('dashboard');
-#})->name('dashboard');
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
 
 
 # ----------------- CLIENTS ---------------
 	# -------------------------------------------
-		Route::view('manage', 'manage.dashboard');
-		#Route::get('/boutique', '[HomeController@boutiqueHome]')->name('boutique.home');
-		Route::view('/', 'home.home');
+	#Route::get('/boutique', '[HomeController@boutiqueHome]')->name('boutique.home');
+		Route::view('/', 'home.home')->name('home');
 		Route::view('/home', 'home.home')->name('home');
+		Route::view('/manage', 'manage.dashboard');
 		Route::get('/info', [HomeController::class, 'info'])->name('info.info');
 		Route::get('/info/terms', [HomeController::class, 'terms'])->name('info.terms');
 		Route::get('/info/cookies', [HomeController::class, 'cookies'])->name('info.cookies');
