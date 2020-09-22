@@ -5,26 +5,19 @@
 
 @if(Cart::count() >= 1)
 
-<div class="columns is-multiline" id="create_order">
+<div class="columns is-multiline is-marginless" id="create_order">
   {{-- MODAL FAST ORDER --}}
-    <div class="column is-marginless is-12 has-text-centered">
-      <b-modal :active.sync="modal_fast_order">
+    <div class="column is-12 has-text-centered">
+      <b-modal :active.sync="modal_fast_order" :width="330">
         <div class="box">
           <form method="post" action="{{ route('order.fast.store') }}" >
             @csrf
-              @foreach(Cart::content() as $product)
-                  {{-- <input type="hidden" value="{{ $product->id }}" name="products[id][]" />
-                  <input type="hidden" value="{{ $product->options[0] }}" name="products[sizes][]" />
-                  <input type="hidden" value="{{ $product->qty }}" name="products[qty][]" /> --}}
-                  {{-- <input type="hidden" value="{{ $product->id }}_{{ $product->options[0] }}_{{ $product->qty }}" name="products[]" /> --}}
-              @endforeach
               <span class="heading is-size-5">БЪРЗА И ЛЕСНА ПОРЪЧКА</span>
               <hr />
               <i class="is-size-6">Въведете телефонен номер и ние ще се свържем с вас.</i>
-              
               <div class="field">
                 <p class="control has-icons-left has-icons-right">
-                  <input type="input" name="phone" class="input is-success" placeholder=" телефонен номер" :class="{'input': true, 'is-danger': errors.has('ТЕЛЕФОНЕН НОМЕР') }" v-validate="'required|numeric|min:10|max:10'" data-vv-name="ТЕЛЕФОНЕН НОМЕР" />
+                  <input type="input" name="phone" class="input is-success" placeholder="телефонен номер" :class="{'input': true, 'is-danger': errors.has('ТЕЛЕФОНЕН НОМЕР') }" v-validate="'required|numeric|min:10|max:10'" data-vv-name="ТЕЛЕФОНЕН НОМЕР" />
                   <span class="icon is-left has-text-success" :class="{'has-text-danger': errors.has('ТЕЛЕФОНЕН НОМЕР') }" data-vv-name="ТЕЛЕФОНЕН НОМЕР" />
                   <i class="fa fa-phone"></i>
                   </span>
@@ -37,7 +30,7 @@
             <input id="viber_switch" type="checkbox" name="viber" value="1" class="switch is-thin is-success">
             <label for="viber_switch"></label>
             <button type="submit" class="button is-success is-fullwidth m-t-20 m-b-20"> ПОРЪЧАЙ </button>
-            <a class="button is-dark is-small" @click="modal_fast_order = false">ОТКАЗ</a>
+            <a class="button is-light is-small" @click="modal_fast_order = false">ОТКАЗ</a>
           </form>
         </div>
       </b-modal>
@@ -49,17 +42,17 @@
     </div>
   {{-- END FAST ORDER --}}
 
-  {{-- CART LIST --}}
+  {{-- CART LIST --}} 
     <div class="column is-12">
       <div class="columns is-multiline">
         <div class="column is-12">ДОБАВЕНИ ПРОДУКТИ</div>
         <?php foreach(Cart::content() as $row) : $slug = App\Http\Controllers\HomeController::getProductSlug($row->id); ?>
           <div class="column is-one-third box mx-3">
-            <div class="columns">
+            <div class="columns is-mobile">
               <div class="column is-1">
                 <div class="columns is-multiline">
-                  <div class="column is-12 p-t-20">
-                    <b-modal :active.sync="cart_delete{{ $row->rowId }}" :width="350">
+                  <div class="column is-12 pt-4">
+                    <b-modal :active.sync="cart_delete{{ $row->rowId }}" :width="330">
                       <div class="box">
                         <form method="post" action="{{ route('cart.delete') }}" >
                           {{ csrf_field() }}
@@ -72,12 +65,12 @@
                       </div>
                     </b-modal>
                     <a @click="cart_delete{{ $row->rowId }} = true">
-                      <i class="fa fa-trash fa-lg has-text-danger"></i>
+                      <i class="fa fa-close has-text-danger"></i>
                     </a>
                   </div>
-                  <div class="column is-12 is-paddingless m-t-5" style="height: 3px; width: 100%;background-color: #ccc"></div>
-                  <div class="column is-12 p-t-20">
-                    <b-modal :active.sync="cart_update{{ $row->rowId }}" :width="350">
+                  <div class="column is-12 is-paddingless mt-2" style="height: 3px; width: 100%;background-color: #eee"></div>
+                  <div class="column is-12 pt-4">
+                    <b-modal :active.sync="cart_update{{ $row->rowId }}" :width="330">
                       <div class="box">
                         <form method="post" action="{{ route('cart.update') }}" >
                           @csrf
@@ -109,12 +102,12 @@
                       </div>
                     </b-modal>
                     <a @click="cart_update{{ $row->rowId }} = true">
-                      <i class="fa fa-edit fa-lg has-text-success"></i>
+                      <i class="fa fa-refresh has-text-success"></i>
                     </a>
                   </div>
                 </div>
               </div>
-              <div class="column is-4 is-paddingless p-t-15 p-l-20">
+              <div class="column is-4">
                 <img src="{{asset('/images/thumbs')}}/{{ \App\Product::firstPhoto($row->id)->photo }}" style="border-radius: 50%;" width="100px" height="100px" alt="{{ $row->name }}" title="{{ $row->name }}" />
               </div>
               <div class="column is-7 has-text-centered is-size-7">
@@ -158,7 +151,7 @@
                 <input type="text" name="names" value="@if(!empty(session()->has('customer_names'))){{ session()->get('customer_names') }}@endif"
                 placeholder="вашите имена"
                 :class="{'input': true, 'is-danger': errors.has('ВАШИТЕ ИМЕНА') }"
-                v-validate="'required|alpha_spaces|min:3|max:255'"
+                v-validate="'required|alpha_spaces|min:3|max:50'"
                 data-vv-name="ВАШИТЕ ИМЕНА">
                 <span class="icon is-left"><i class="fa fa-user"></i></span>
               </div>
@@ -185,18 +178,18 @@
             </span>
             <div class="steps-content is-divider-content">
               <b-field>
-                <b-radio-button v-model="shipping_company" native-value="econt" type="is-info" @click="active_2 = true; active_1 = false">
+                <b-radio-button v-model="shipping_company" name="shipping_company" native-value="ЕКОНТ" type="is-info" @click="active_2 = true; active_1 = false">
                 <span class="px-5">ЕКОНТ</span>
                 </b-radio-button>
-                <b-radio-button v-model="shipping_company" native-value="speedy" type="is-warning" @click="active_2 = true; active_1 = false">
+                <b-radio-button v-model="shipping_company" name="shipping_company" native-value="СПИДИ" type="is-warning" @click="active_2 = true; active_1 = false">
                 <span class="px-5">СПИДИ</span>
                 </b-radio-button>
               </b-field>
               <b-field>
-                <b-radio-button v-model="shipping_type" native-value="office" type="is-light" @click="active_2 = true; active_1 = false">
+                <b-radio-button v-model="shipping_type" name="shipping_type" native-value="ОФИС" type="is-dark" @click="active_2 = true; active_1 = false">
                 <span class="px-5">ДО ОФИС</span>
                 </b-radio-button>
-                <b-radio-button v-model="shipping_type" native-value="home" type="is-light" @click="active_2 = true; active_1 = false">
+                <b-radio-button v-model="shipping_type" name="shipping_type" native-value="АДРЕС" type="is-dark" @click="active_2 = true; active_1 = false">
                 <span class="px-5">ДО АДРЕС</span>
                 </b-radio-button>
               </b-field>
@@ -232,10 +225,10 @@
               <div class="has-text-left">АДРЕС</div>
               <div class="field">
                 <div class="control has-icons-left">
-                <input type="text" name="address" value="@if(!empty(session()->has('address'))){{ session()->get('address') }} @endif"
+                <input type="text" name="address" value="@if(!empty(session()->has('address'))){{ session()->get('address') }}@endif"
                 placeholder="адрес за доставка"
                 :class="{'input': true, 'is-danger': errors.has('АДРЕС') }"
-                v-validate="'required|min:5|max:255'"
+                v-validate="'required|min:5|max:100'"
                 data-vv-name="АДРЕС" @focus="active_3 = true" @blur="active_3 = false; active_4 = true">
                 <span class="icon is-left"><i class="fa fa-truck"></i></span>
                 <div v-show="errors.has('АДРЕС')" class="help is-danger">@{{ errors.first('АДРЕС') }}</div>
@@ -250,11 +243,11 @@
                 <i class="fa fa-comment"></i>
               </span>
             </span>
-            <div class="steps-content is-divider-content">
-              <div class="has-text-left">КОМЕНТАР</div>
+            <div class="steps-content is-divider-content has-text-left">
+              <div>КОМЕНТАР</div>
               <textarea name="comment" class="textarea" rows="2"
               :class="{'input': true, 'is-danger': errors.has('КОМЕНТАР') }"
-              v-validate="'min:5|max:1000'"
+              v-validate="'max:1000'"
               data-vv-name="КОМЕНТАР" @focus="active_4 = true; active_3 = false" @blur="active_5 = true; active_4 = false">@if(!empty(session()->has('comment'))){{ session()->get('comment') }}@endif</textarea>
               <div v-show="errors.has('КОМЕНТАР')" class="help is-danger">@{{ errors.first('КОМЕНТАР') }}</div>
             </div>
@@ -268,7 +261,7 @@
             </span>
           </li>
         </ul>
-        <button type="submit" class="button is-success is-fullwidth my-5">
+        <button type="submit" class="button is-success is-fullwidth py-5 my-6">
           <span>ПРЕГЛЕД И ПОРЪЧКА</span>
           <span class="icon"><i class="fa fa-arrow-right fa-lg"></i></span>
         </button>
@@ -307,8 +300,8 @@
       active_3: false,
       active_4: false,
       active_5: false,
-      shipping_company: 'speedy',
-      shipping_type: 'office',
+      shipping_company: 'СПИДИ',
+      shipping_type: 'ОФИС',
       zone_name: '',
       data: <?php echo $zonesS; ?>,
       selected: null,

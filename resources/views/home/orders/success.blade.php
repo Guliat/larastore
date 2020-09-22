@@ -2,28 +2,21 @@
 @section('title', '| ПОРЪЧКА #'. $order->id)
 @section('header', 'ПОРЪЧКА #'. $order->id)
 @section('content')
-<div class="columns is-multiline p-t-20">
-    <div class="column is-12 has-text-centered is-size-3">
-        <div class="is-size-5 notification is-success">Благодарим ви за направената поръчка, за потвърждение наш служител ще се свърже с вас в рамките на един работен ден.</div>
-        <small>СУМА ЗА ПЛАЩАНЕ</small> {{ $order->total_price }}лв.
+<div class="columns is-multiline is-marginless py-5">
+    <div class="column is-12 has-text-centered">
+        <div class="is-size-5 notification is-success">
+            Благодарим ви за направената поръчка, за потвърждение наш служител ще се свърже с вас в рамките на един работен ден.
+        </div>
+       {{-- <small>СУМА ЗА ПЛАЩАНЕ</small> {{ $order->total_price }}лв.
         <br />
-        <small class="is-size-6">
-            <small>ПРОДУКТИ:</small> {{ $order->total_price -  $order->shipping_price }}лв. |
-            <small>ДОСТАВКА:</small>
-            @if($order->total_price > 100.00)
-                0.00лв.
-            @else
-                {{ $order->shipping_price }}лв.
-            @endif
-        </small>
-        {{-- <div class="notification is-dark is-large">
+         <div class="notification is-dark is-large">
             <small class="is-size-6">УНИКАЛЕН КОД</small>
             <span class="has-tooltip-multiline has-tooltip-danger is-size-5" data-tooltip="Уникален код за проверка и управление на поръчката.">
                 <i class="fa fa-question-circle"></i>
             </span>
             <br />
             {{ str_random(10) }}
-        </div> --}}
+        </div> 
     </div>
     <!-- STEPS -->
     <div class="column is-12">
@@ -82,7 +75,7 @@
                     <i class="fa fa-phone fa-2x"></i><br />
                     {{$order->phone}} <br />
                     {{-- <b class="is-size-7">Нямате профил ?</b> <u class="is-size-7">Нужен ли ми е ? (modal)</u> <br />
-                    <a href="#" class="button is-success is-small">СЪЗДАЙТЕ ПРОФИЛ</a> <br /> --}}
+                    <a href="#" class="button is-success is-small">СЪЗДАЙТЕ ПРОФИЛ</a> <br />
                 </div>
             </div>
             <!-- ORDER INFO -->
@@ -131,7 +124,7 @@
                     @endforeach
             </div>
             </div>
-        </div>
+        </div>--}}
     </div>
 </div>
 @endsection

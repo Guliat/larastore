@@ -22,31 +22,93 @@ use App\Notifications\newOrder;
 
 class HomeController extends Controller {
 
+  public function storeOrder(Request $request) {
+    if(Cart::content()->isEmpty()) {
+        return redirect()->route('order.create');
+    }
+    // VALIDATE DATA
+    // $validator = Validator::make($request->all(), [
+    //            'names'    => 'required|min:3|max:255',
+    //            'phone'    => 'required|numeric',
+    //            'address'  => 'required|min:5|max:255',
+    //            'zone'     => 'required',
+    //            'shipping' => 'required',
+    //            // 'terms'    => 'accepted',
+    //        ]);
 
+    // if($validator->fails()) {
+    //    return redirect()->back()->withErrors($validator)->withInput();
+    // }
+
+    $order = new Order;
+    // CUSTOMER NAMES
+    $order->names = Session::get('customer_names');
+    // CUSTOMER PHONE NUMBER
+    $order->phone = Session::get('customer_phone');
+    // SHIPPING ADDRESS
+    $order->address = Session::get('address');
+    // PAYMENT METHOD
+    $order->payment_id = 1;
+    // ORDER COMMENT
+    $order->comment = Session::get('comment');
+    // USER AGENT
+    $order->user_agent = $_SERVER['HTTP_USER_AGENT'];
+    // TOTAL CART PRICE
+    $cart_total = null;
+    foreach(Cart::content() as $ctRow) {
+        $cart_total += $ctRow->total;
+    }
+    // TOTAL PRICE
+    $order->total_price = $cart_total;
+    // SHIPPING METHOD
+    $shippin_company = Session::get('shipping_company');
+    $shipping_type = Session::get('shipping_type');
+    $shipping = Shipping::where('name', '=', $shippin_company.'-'.$shipping_type)->first();
+    $order->shipping_id = $shipping->id;
+    // SHIPPING ZONE
+    $shipping_zone = Zone::where('name', Session::get('shipping_zone'))->first();
+    $order->zone_id = $shipping_zone->id;
+    // STORE DATA TO DATABASE
+    $order->save();
+    // SYNC STATUSES
+    $order->statuses()->sync('1', false);
+    // STORE ADDITIONAL DATA TO INTERMEDIATE TABLE
+    foreach(Cart::content() as $row) {
+        $options = null;
+        foreach($row->options as $opt) {
+            $options .= $opt.' , ';
+        }
+        $order->products()->attach($row->id, ['options' => $options, 'quantity' => $row->qty, 'sold_price' => $row->price]);
+    }
+    // REMOVE ORDER COMMENT FROM SESSION
+    if(Session::has('comment')) {
+      Session::forget('comment');
+    }
+    // EMPTYING CART
+    Cart::destroy();
+    // RETURN TO ORDER SUCCESS
+    return view('home.orders.success')->withOrder($order);
+  }
+
+  public function successOrder($id) {
+    $order = Order::where('id', $id)->first();
+    return view('home.orders.success')->withOrder($order);
+  }
+ 
   public function reviewOrder() {
-
-    $shippings = Shipping::all();
-    $defaultShipping = Shipping::first()->name;
-    $zones = Zone::orderBy('name')->get();
-    $payments = Payment::all();
-    $defaultPayment = Payment::first()->name;
-    $terms = Setting::select('terms')->first();
-
-    return view('home.orders.review')
-        ->withShippings($shippings)
-        ->withDefaultShipping($defaultShipping)
-        ->withZones($zones)
-        ->withPayments($payments)
-        ->withDefaultPayment($defaultPayment);
+    return view('home.orders.review');
   }
 
   public function storeOrderToSession(Request $request) {
     // VALIDATE DATA
     $validator = Validator::make($request->all(), [
-      'names'    => 'required|min:3|max:255',
+      'names'    => 'required|min:3|max:50',
       'phone'    => 'required|numeric',
-      'address'  => 'required|min:5|max:255',
-      'zone'     => 'required',
+      'address'  => 'required|min:5|max:100',
+      'zone'     => 'required|max:30',
+      'comment'  => array(
+                      'regex:/(^([a-zA-Z0-9 \@\.\,\?\!\-\_\p{Cyrillic}]+)$)/u','nullable'
+                    )
     ]);
     // CHECK VALIDATOR
     if($validator->fails()) {
@@ -59,9 +121,9 @@ class HomeController extends Controller {
     // SHIPPING ZONE
     Session::put('shipping_zone', $request->zone);
     // SHIPPING COMPANY
-    Session::put('shipping_company', $request->company);
+    Session::put('shipping_company', $request->shipping_company);
     // SHIPPING TYPE
-    Session::put('shipping_type', $request->type);
+    Session::put('shipping_type', $request->shipping_type);
     // SHIPPING ADDRESS
     Session::put('address', $request->address);
     // ORDER COMMENT
@@ -69,101 +131,6 @@ class HomeController extends Controller {
     // GO TO REVIEW PAGE
     return redirect()->route('order.review');
   }
-
-  public function storeOrder(Request $request) {
-    if(Cart::content()->isEmpty()) {
-        return redirect()->route('order.create');
-    }
-    // VALIDATE DATA
-    $validator = Validator::make($request->all(), [
-                'names'    => 'required|min:3|max:255',
-                'phone'    => 'required|numeric',
-                'address'  => 'required|min:5|max:255',
-                'zone'     => 'required',
-                'shipping' => 'required',
-                // 'terms'    => 'accepted',
-            ]);
-
-    if($validator->fails()) {
-        return redirect()->back()->withErrors($validator)->withInput();
-    }
-
-    $order = new Order;
-
-    // CUSTOMER NAMES
-    $order->names = $request->names;
-
-    // CUSTOMER PHONE NUMBER
-    $order->phone = $request->phone;
-
-    // SHIPPING METHOD
-    $shipping = Shipping::where('name', '=', $request->shipping)->first();
-    $order->shipping_id = $shipping->id;
-    $order->shipping_price = $shipping->price;
-
-    // SHIPPING ZONE
-    $order->zone_id = $request->zone;
-
-    // SHIPPING ADDRESS
-    $order->address = $request->address;
-
-    // PAYMENT METHOD
-    $payment = Payment::where('name', '=', $request->payment)->first();
-    $order->payment_id = $payment->id;
-
-    // ORDER COMMENT
-    $order->comment = $request->comment;
-
-    // USER AGENT
-    $order->user_agent = $_SERVER['HTTP_USER_AGENT'];
-
-    // TOTAL CART PRICE
-    $cart_total = null;
-    foreach(Cart::content() as $ctRow) {
-        $cart_total += $ctRow->total;
-    }
-
-    if($cart_total > 100.00) {
-        $order->total_price = $cart_total;
-    } else {
-        $order->total_price = $cart_total + $shipping->price;
-    }
-
-
-    // STORE DATA TO DATABASE
-    $order->save();
-
-    $order->statuses()->sync('1', false);
-
-    // STORE ADDITIONAL DATA TO INTERMEDIATE TABLE
-
-    foreach(Cart::content() as $row) {
-        $options = null;
-        foreach($row->options as $opt) {
-            $options .= $opt.' , ';
-        }
-        $order->products()->attach($row->id, ['options' => $options, 'quantity' => $row->qty, 'sold_price' => $row->price]);
-    }
-
-    // EMPTYING CART
-    Cart::destroy();
-
-    // $getSumTotal = Order::where('id', $order->id)->select('order_total')->first();
-    $sumTotal = $order->total_price;
-
-    // SEND SUCCESS MESSAGE
-    // Session::flash('success', 'БЛАГОДАРИМ ВИ ! <br />ПОРЪЧКАТА ВИ Е РЕГИСТРИРАНА. <br />СУМАТА ЗА ПЛАЩАНЕ Е '. $sumTotal .'лв.');
-
-    // RETURN TO HOME
-    return view('home.orders.success')->withOrder($order);
-  }
-
-  public function successOrder($id) {
-    $order = Order::where('id', $id)->first();
-    return view('home.orders.success')->withOrder($order);
-  }
- 
-  // ----------------------
 
   public function showCart() {
     return view('home.orders.create');
@@ -248,7 +215,7 @@ class HomeController extends Controller {
     // SEND SUCCESS MESSAGE
     Session::flash('success', 'БЛАГОДАРИМ ВИ! <br />ПОРЪЧКАТА ВИ Е РЕГИСТРИРАНА.');
     // RETURN TO HOME
-    return redirect('home');
+    return view('home.orders.success')->withOrder($order);
   }
 
  // -----------------------

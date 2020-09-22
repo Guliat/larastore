@@ -67,7 +67,7 @@ return [
     'not_in'               => 'The selected :attribute is invalid.',
     'numeric'              => 'ПОЛЕ :attribute ТРЯБВА ДА СЪДЪРЖА САМО ЧИСЛА.',
     'present'              => 'The :attribute field must be present.',
-    'regex'                => 'The :attribute format is invalid.',
+    'regex'                => 'НЕПОЗВОЛЕН текст в поле :attribute.',
     'required'             => 'ПОЛЕ ":attribute" Е ЗАДЪЛЖИТЕЛНО',
     'required_if'          => 'The :attribute field is required when :other is :value.',
     'required_unless'      => 'The :attribute field is required unless :other is in :values.',
@@ -128,6 +128,7 @@ return [
         'promo_days'  => 'СРОК',
         'category_id' => 'КАТЕГОРИЯ',
         'percent'     => 'ПРОЦЕНТ',
+        'comment'     => 'КОМЕНТАР',
     ],
 
 ];
