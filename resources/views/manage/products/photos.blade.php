@@ -3,31 +3,9 @@
 @section('manage.content')
 <!-- PRODUCT PHOTOS -->
 <div class="columns is-centered is-multiline" id="photos">
-    <!-- UPLOAD BUTTON -->
-    <div class="column is-6">
-        @if($count >= 5)
-        @else
-            <form method="POST" action="{{ route('manage.photos.store') }}" accept-charset="UTF-8" enctype="multipart/form-data">
-                {{ csrf_field() }}
-                <input type="hidden" name="product_id" value="{{ $productId }}">
-                <input type="hidden" name="product_model" value="{{ $productModel->model }}">
-                <div class="file is-boxed is-success has-name column is-12 has-text-centered">
-                    <label class="file-label">
-                        <input class="file-input" type="file" name="photo" onchange="this.form.submit();">
-                        <span class="file-cta">
-                            <i class="fa fa-plus fa-2x"></i>
-                            <span class="is-size-6">
-                                НОВА СНИМКА
-                                <br />
-                                модел {{ $productModel->model }}
-                            </span>
-                        </span>
-                    </label>
-                </div>
-            </form>
-        @endif
-    </div>
-    <!-- END UPLOAD BUTTON -->
+	<div class="column is-12 has-text-centered">
+		<a class="button is-dark" href='{{route('manage.products.show', $productId)}}'> ПРЕГЛЕД НА ПРОДУКТА</a>
+	</div>
     <!-- UPLOADED PHOTOS -->
     <div class="column is-12">
         <div class="columns is-centered is-multiline">
@@ -114,7 +92,32 @@
             @endforeach
         </div>
     </div>
-    <!-- END UPLOADED PHOTOS -->
+		<!-- END UPLOADED PHOTOS -->
+			<!-- UPLOAD BUTTON -->
+			<div class="column is-6">
+				@if($count >= 5)
+				@else
+					<form method="POST" action="{{ route('manage.photos.store') }}" accept-charset="UTF-8" enctype="multipart/form-data">
+						@csrf
+						<input type="hidden" name="product_id" value="{{ $productId }}">
+						<input type="hidden" name="product_model" value="{{ $productModel->model }}">
+						<div class="file is-boxed is-success has-name column is-12 has-text-centered">
+							<label class="file-label">
+								<input class="file-input" type="file" name="photo" onchange="this.form.submit();">
+								<span class="file-cta">
+									<i class="fa fa-plus fa-2x"></i>
+									<span class="is-size-6">
+											НОВА СНИМКА
+											<br />
+											модел {{ $productModel->model }}
+									</span>
+								</span>
+							</label>
+						</div>
+					</form>
+				@endif
+			</div>
+		<!-- END UPLOAD BUTTON -->
     <!-- PROGRESS BAR -->
     <div class="column is-12">
       @if($count === 0)
@@ -135,9 +138,6 @@
         @endif
       </div>
       <!-- END PROGRESS BAR -->
-      <div class="column is-12 has-text-centered">
-        <a class="button is-dark" href='{{route('manage.products.show', $productId)}}'> ПРЕГЛЕД НА ПРОДУКТА</a>
-      </div>
     <!-- META IMAGE -->
     <div class="column is-8 has-text-centered">
         <span class="is-size-6">ТАЗИ СНИМКА СЕ ПОКАЗВА ПРИ СПОДЕЛЯНЕ В СОЦИАЛНИТЕ МРЕЖИ И ПРИЛОЖЕНИЯТА</span>

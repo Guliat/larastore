@@ -25,3 +25,4 @@
 <link href="https://fonts.googleapis.com/css2?family=Exo+2" rel="stylesheet">
 <!-- STYLES -->
 <link href="{{ asset('css') }}/app.css?_v131219" rel="stylesheet">
+<link href="{{ asset('css') }}/manage.css" rel="stylesheet">

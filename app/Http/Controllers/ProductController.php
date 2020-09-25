@@ -264,7 +264,7 @@ class ProductController extends Controller {
         // $product->slug = $slug;
 
         $product->save();
-        Session::flash('success', 'ЗАПИСАНО');
+        Session::flash('updated');
         // if($product->is_approved == 0) {
             // return redirect()->route('manage.products.approve.show', $product->id);
         // } else {

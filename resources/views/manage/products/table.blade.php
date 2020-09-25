@@ -1,14 +1,14 @@
 @extends('manage.dashboard')
 @section('title', '| ВСИЧКИ ПРОДУКТИ')
 @section('manage.content')
-<div class="columns is-multiline" id="featured_products">
+<div class="columns is-marginless is-multiline is-centered" id="featured_products">
   @include('manage.products.header')
 	@foreach($products as $product)
     <?php
     $promo_price = App\Promotion::where('product_id', '=', $product->id)->where('is_active', '=', 1)->first();
     $firstPhoto = \App\Product::firstPhoto($product->id);
     ?>
-    <div class="column is-12 box exo">
+    <div class="column is-10 box my-5 exo">
       <div class="columns">
         <div class="column is-2">
           <div class="columns is-multiline has-text-centered">
@@ -35,8 +35,28 @@
                   </button>
                 </div>
                   <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                    <div class="dropdown-content">
+                    <div class="dropdown-content has-text-left">
                       <div class="dropdown-item">
+                        @if(!$product->is_approved)
+                          <b-modal :active.sync="map{{ $product->id }}">
+                            <div class="box">
+                              <form method="post" action="{{ route('manage.products.approve.update', $product->id) }}" method="post">
+                              {{ csrf_field() }}
+                              {{ method_field('put') }}
+                                <input type="hidden" name="product_id" value="{{ $product->id }}" />
+                                <span class="is-size-5"> Искате ли да направите този продукт видим за потребителите ?</span>
+                                <hr />
+                                <button type="submit" class="button is-success">ДА</button>
+                                <a class="button is-light" @click="map{{ $product->id }} = false">ОТКАЗ</a>
+                              </form>
+                            </div>
+                          </b-modal>
+                          <a class="dropdown-item p-l-20" @click="map{{ $product->id }} = true">
+                            <span class="icon has-text-success"><i class="fa fa-check fa-lg"></i></span>
+                            <span>ОДОБРИ</span>
+                          </a>
+                          <hr />
+                        @endif
                         <a href="{{ route('manage.products.edit', $product->id) }}" class="dropdown-item p-l-20" target="_blank">
                           <span class="icon has-text-dark"><i class="fa fa-pencil fa-lg"></i></span>
                           <span>РЕДАКТИРАЙ</span>
@@ -96,8 +116,8 @@
                               <input type="hidden" name="product_id" value="{{ $product->id }}" />
                               <span class="is-size-5"> Искате ли да премахнете този продукт ?</span>
                               <hr />
-                              <button type="submit" class="button is-success">ДА</button>
-                              <a class="button is-danger" @click="mrp{{ $product->id }} = false">ОТКАЗ</a>
+                              <button type="submit" class="button is-danger">ДА</button>
+                              <a class="button is-light" @click="mrp{{ $product->id }} = false">ОТКАЗ</a>
                             </form>
                           </div>
                         </b-modal>
@@ -136,7 +156,7 @@
           @endif
           <hr />
           @if(!$product->is_active)
-            <span class="tag is-medium is-danger">
+            <span class="tag is-large is-danger">
               ИЗТРИТ
             </span>
           @endif
@@ -146,7 +166,7 @@
             </span>
           @endif
           @if(!$product->is_approved)
-            <span class="tag is-warning">
+            <span class="tag is-medium is-warning">
               НЕОДОБРЕН
             </span>
           @endif
@@ -175,6 +195,7 @@ new Vue({
     foreach($products as $product) { echo 'maf'.$product->id.':false, '; }
     foreach($products as $product) { echo 'mrf'.$product->id.':false, '; }
     foreach($products as $product) { echo 'mrp'.$product->id.':false, '; }
+    foreach($products as $product) { echo 'map'.$product->id.':false, '; }
     ?>
     }
 })

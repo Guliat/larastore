@@ -75,7 +75,7 @@ class PhotoController extends Controller {
           $photos->save();
         }
         $photosToView = Photo::where('product_id', '=', $request->id)->get();
-        Session::flash('success', 'СНИМКАТА ВИ Е КАЧЕНА УСПЕШНО !');
+        Session::flash('added');
         return redirect()->route('manage.photos.show', $request->product_id)->withPhotos($photosToView)->withCount($count);
     }
     // CHANGE ORDER
@@ -334,6 +334,8 @@ class PhotoController extends Controller {
         File::delete(public_path('images/half/' . $request->photo));
         File::delete(public_path('images/thumbs/' . $request->photo));
         File::delete(public_path('images/meta/' . $request->photo));
+        // FLASH MESSAGE
+        Session::flash('deleted');
         // REDIRECT BACK TO PAGE
         return redirect()->back();
     }

@@ -24497,11 +24497,6 @@ MIT (https://github.com/Wikiki/bulma-steps/blob/master/LICENSE)
   max-height: 35em;
 }
 
-.manage-menu {
-  background-color: #333;
-  border-right: 10px solid #222;
-}
-
 .switch[type=checkbox] {
   outline: 0;
   -webkit-user-select: none;
